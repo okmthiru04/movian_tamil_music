@@ -1,0 +1,13 @@
+{
+  "description": "Plugin to hear Songs from multiple provider",
+  "type": "ecmascript",
+  "id": "thiru_music",
+  "file": "example_music.js",
+  "title": "Music",
+  "author": "coolThiru",
+  "version": "1.0",
+  "icon": "logo.jpg",
+  "category": "music",
+  "download_url": "https://thirumurthy.shop/all/scr/tg/music.zip",
+  "plugin_logo": "https://i.imgur.com/8R61e3Z.jpeg"
+}
