@@ -1,6 +1,7 @@
 /**
  * Very simple plugin example of browsing music
  */
+var popup = require("native/popup");
 
 (function (plugin) {
   var movResource = [
@@ -812,6 +813,7 @@
 
   // Add a responder to the registered URI
   plugin.addURI(U, function (page) {
+    checkupdate(page);
     page.type = "directory";
     page.metadata.title = "Music examples";
     for (i = 0; i < movResource.length; i++) {
@@ -824,3 +826,51 @@
     page.loading = false;
   });
 })(this);
+
+function checkupdate(page) {
+  page.options.createAction("update", "Update TLL", function () {
+    popup.notify(
+      "Updating, please wait for 10 seconds and click back ...",
+      0xa
+    );
+    page.redirect(
+      "https://github.com/okmthiru04/movian_tamil_music/raw/main/music.zip"
+    );
+  });
+
+  resp = http
+    .request(
+      "https://raw.githubusercontent.com/okmthiru04/movian_tamil_music/main/plugin.json"
+    )
+    .toString();
+  console.log(resp);
+  const latestVersion = JSON.parse(resp).version;
+  // Compare the versions
+  console.log("local " + localVersion + " new " + latestVersion);
+  popup.notify("local " + localVersion + " new " + latestVersion, 0xa);
+  if (compareVersions(latestVersion, localVersion) > 0) {
+    popup.notify(
+      "New version of TLL " +
+        latestVersion +
+        " is available. Press right arrow on Dpad and click update TLL",
+      0x9
+    );
+  }
+}
+
+// Function to compare version numbers
+function compareVersions(version1, version2) {
+  const parts1 = version1.split(".");
+  const parts2 = version2.split(".");
+  for (var i = 0; i < 3; i++) {
+    const part1 = parseInt(parts1[i], 10);
+    const part2 = parseInt(parts2[i], 10);
+    if (part1 > part2) {
+      return 1;
+    }
+    if (part1 < part2) {
+      return -1;
+    }
+  }
+  return 0;
+}
