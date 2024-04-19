@@ -2,6 +2,11 @@
  * Very simple plugin example of browsing music
  */
 var popup = require("native/popup");
+var http = require("movian/http");
+var plugin = JSON.parse(Plugin.manifest);
+var PREFIX = plugin.id;
+var localVersion = plugin.version;
+var LOGO = Plugin.path + "logo.jpg";
 
 (function (plugin) {
   var movResource = [
@@ -809,13 +814,15 @@ var popup = require("native/popup");
   var U = "example:music:";
 
   // Register a service (will appear on home page)
-  plugin.createService("Music example", U, "other", true);
+  plugin.createService("Tamil Music", U, "other", true);
 
   // Add a responder to the registered URI
   plugin.addURI(U, function (page) {
+    page.loading = true;
     checkupdate(page);
     page.type = "directory";
-    page.metadata.title = "Music examples";
+    page.metadata.title = "Tamil Music";
+    page.metadata.logo = LOGO;
     for (i = 0; i < movResource.length; i++) {
       page.appendItem(movResource[i].url, "audio", {
         title: movResource[i].name,
@@ -828,7 +835,7 @@ var popup = require("native/popup");
 })(this);
 
 function checkupdate(page) {
-  page.options.createAction("update", "Update TLL", function () {
+  page.options.createAction("update", "Update Tamil Music", function () {
     popup.notify(
       "Updating, please wait for 10 seconds and click back ...",
       0xa
@@ -850,9 +857,9 @@ function checkupdate(page) {
   popup.notify("local " + localVersion + " new " + latestVersion, 0xa);
   if (compareVersions(latestVersion, localVersion) > 0) {
     popup.notify(
-      "New version of TLL " +
+      "New version of Tamil Music " +
         latestVersion +
-        " is available. Press right arrow on Dpad and click update TLL",
+        " is available. Press right arrow on Dpad and click update Tamil Music",
       0x9
     );
   }
